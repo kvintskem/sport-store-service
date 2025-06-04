@@ -1,0 +1,19 @@
+services:
+  mysql8:
+    platform: linux/x86_64
+    image: mysql:8.0.42
+    container_name: sss-mysql8
+    networks:
+      - sss_network
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+      - MYSQL_DATABASE=sports_store
+    volumes:
+      - ./var/mysql8:/var/lib/mysql
+    ports:
+      - 3362:3306
+
+networks:
+  sss_network:
+    driver: bridge
+    name: sss_network

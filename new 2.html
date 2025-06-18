@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>Макет Chat-бота в Telegram</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #eaeaea;
+      font-family: Arial, sans-serif;
+    }
+    .telegram-container {
+      width: 360px;
+      height: 640px;
+      margin: 20px auto;
+      background-color: #fafafa;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .telegram-header {
+      height: 50px;
+      background-color: #0088cc;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .chat-area {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .message {
+      max-width: 75%;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+    .message.bot {
+      align-items: flex-start;
+    }
+    .message.user {
+      align-items: flex-end;
+      margin-left: auto;
+    }
+    .bubble {
+      padding: 8px 12px;
+      border-radius: 18px;
+      position: relative;
+      font-size: 14px;
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
+    .bot .bubble {
+      background-color: #ffffff;
+      color: #2c3e50;
+      border: 1px solid #ddd;
+      border-top-left-radius: 0;
+    }
+    .user .bubble {
+      background-color: #0088cc;
+      color: #ffffff;
+      border-top-right-radius: 0;
+    }
+    .timestamp {
+      font-size: 10px;
+      color: #999;
+      margin-top: 2px;
+    }
+    .inline-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+    .inline-button {
+      background-color: #f1f1f1;
+      color: #2c3e50;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      padding: 6px 10px;
+      font-size: 13px;
+      margin: 4px 4px 0 0;
+      cursor: pointer;
+    }
+    .inline-button:hover {
+      background-color: #e1e1e1;
+    }
+    .product-list {
+      margin-top: 6px;
+    }
+    .product-item {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 8px;
+      margin-bottom: 6px;
+      display: flex;
+      flex-direction: column;
+    }
+    .product-title {
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .product-price {
+      font-size: 13px;
+      color: #27ae60;
+      margin-bottom: 6px;
+    }
+    .button-more {
+      align-self: flex-end;
+      background-color: #0088cc;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 4px 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .button-more:hover {
+      background-color: #0099dd;
+    }
+    .product-detail {
+      margin-top: 6px;
+      display: flex;
+      flex-direction: column;
+      background-color: #ffffff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 10px;
+    }
+    .product-detail img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    .product-description {
+      font-size: 13px;
+      color: #2c3e50;
+    }
+  </style>
+</head>
+<body>
+  <div class="telegram-container">
+    <!-- Заголовок -->
+    <div class="telegram-header">Telegram</div>
+
+    <!-- Область чата -->
+    <div class="chat-area">
+      <!-- Сообщение от пользователя -->
+      <div class="message user">
+        <div class="bubble">/start</div>
+        <div class="timestamp">10:00</div>
+      </div>
+
+      <!-- Ответ бота с меню опций -->
+      <div class="message bot">
+        <div class="bubble">
+          Добро пожаловать! Выберите одну из опций:
+          <div class="inline-buttons">
+            <div class="inline-button">Новинки</div>
+            <div class="inline-button">Категории</div>
+            <div class="inline-button">Новости</div>
+            <div class="inline-button">Подписка</div>
+            <div class="inline-button">Заявка</div>
+          </div>
+        </div>
+        <div class="timestamp">10:00</div>
+      </div>
+
+      <!-- Пользователь нажал кнопку "Новинки" -->
+      <div class="message user">
+        <div class="bubble">Новинки</div>
+        <div class="timestamp">10:01</div>
+      </div>
+
+      <!-- Бот присылает список товаров -->
+      <div class="message bot">
+        <div class="bubble">
+          Последние товары:
+          <div class="product-list">
+            <!-- Товар 1 -->
+            <div class="product-item">
+              <div class="product-title">Кроссовки Nike Air Zoom Pegasus 38</div>
+              <div class="product-price">7 500 ₽</div>
+              <button class="button-more">Подробнее</button>
+            </div>
+            <!-- Товар 2 -->
+            <div class="product-item">
+              <div class="product-title">Футболка спортивная Nike Dri-FIT</div>
+              <div class="product-price">1 800 ₽</div>
+              <button class="button-more">Подробнее</button>
+            </div>
+            <!-- Товар 3 -->
+            <div class="product-item">
+              <div class="product-title">Йога-коврик Manduka PRO</div>
+              <div class="product-price">7 800 ₽</div>
+              <button class="button-more">Подробнее</button>
+            </div>
+          </div>
+        </div>
+        <div class="timestamp">10:02</div>
+      </div>
+
+      <!-- Пользователь нажал "Подробнее" на первом товаре -->
+      <div class="message user">
+        <div class="bubble">Подробнее</div>
+        <div class="timestamp">10:02</div>
+      </div>
+
+      <!-- Бот присылает детальную информацию о товаре -->
+      <div class="message bot">
+        <div class="bubble">
+          <div class="product-detail">
+            <img src="https://via.placeholder.com/300x180?text=Nike+Pegasus+38" alt="Кроссовки Nike Air Zoom Pegasus 38">
+            <div class="product-title">Кроссовки Nike Air Zoom Pegasus 38</div>
+            <div class="product-description">
+              Удобные беговые кроссовки с амортизацией Air Zoom. Имеют легкую сетчатую верхнюю часть и прочную резиновую подошву для отличного сцепления. Подходят для ежедневных пробежек и марафонов.
+            </div>
+          </div>
+        </div>
+        <div class="timestamp">10:03</div>
+      </div>
+
+      <!-- Пользователь нажал кнопку "Категории" -->
+      <div class="message user">
+        <div class="bubble">Категории</div>
+        <div class="timestamp">10:05</div>
+      </div>
+
+      <!-- Бот присылает список категорий с inline-кнопками -->
+      <div class="message bot">
+        <div class="bubble">
+          Выберите категорию:
+          <div class="inline-buttons">
+            <div class="inline-button">Обувь</div>
+            <div class="inline-button">Одежда</div>
+            <div class="inline-button">Спортивный инвентарь</div>
+            <div class="inline-button">Фитнес-оборудование</div>
+            <div class="inline-button">Тренажёры</div>
+            <div class="inline-button">Велосипеды</div>
+            <div class="inline-button">Туризм</div>
+            <div class="inline-button">Плавание</div>
+            <div class="inline-button">Защита</div>
+            <div class="inline-button">Аксессуары</div>
+          </div>
+        </div>
+        <div class="timestamp">10:06</div>
+      </div>
+
+      <!-- Конец примера -->
+    </div>
+  </div>
+</body>
+</html>

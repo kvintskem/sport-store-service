@@ -1,19 +1,67 @@
 services:
-  mysql8:
-    platform: linux/x86_64
-    image: mysql:8.0.42
-    container_name: sss-mysql8
-    networks:
-      - sss_network
-    environment:
-      - MYSQL_ROOT_PASSWORD=secret
-      - MYSQL_DATABASE=sports_store
-    volumes:
-      - ./var/mysql8:/var/lib/mysql
-    ports:
-      - 3362:3306
+
+    mysql8:
+        image: mysql:8.0.42
+        container_name: sss-mysql8
+        networks:
+            - sss_network
+        environment:
+            - MYSQL_ROOT_PASSWORD=secret
+            - MYSQL_DATABASE=sports_store
+        volumes:
+            - ./var/mysql8:/var/lib/mysql
+        ports:
+            - 3362:3306
+
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: sss_app
+        working_dir: /var/www/html
+        expose:
+            - "80"
+        environment:
+            - VIRTUAL_HOST=sport-store-service-bot.ru
+            - LETSENCRYPT_HOST=sport-store-service-bot.ru
+            - LETSENCRYPT_EMAIL=your@email.com
+        volumes:
+            - ./:/var/www/html
+            - ./php/php.ini:/usr/local/etc/php/php.ini
+        networks:
+            - sss_network
+
+    nginx-proxy:
+        image: jwilder/nginx-proxy
+        container_name: nginx-proxy
+        restart: always
+        ports:
+            - "80:80"
+            - "443:443"
+        networks:
+            - sss_network
+        volumes:
+            - ./certs:/etc/nginx/certs
+            - ./vhost.d:/etc/nginx/vhost.d
+            - ./html:/usr/share/nginx/html
+            - /var/run/docker.sock:/tmp/docker.sock:ro
+
+    letsencrypt:
+        image: jrcs/letsencrypt-nginx-proxy-companion
+        container_name: nginx-letsencrypt
+        restart: always
+        environment:
+            NGINX_PROXY_CONTAINER: nginx-proxy
+            DEFAULT_EMAIL: your@email.com
+        networks:
+            - sss_network
+        volumes:
+            - ./certs:/etc/nginx/certs
+            - ./vhost.d:/etc/nginx/vhost.d
+            - ./html:/usr/share/nginx/html
+            - /var/run/docker.sock:/var/run/docker.sock:ro
 
 networks:
-  sss_network:
-    driver: bridge
-    name: sss_network
+    sss_network:
+      driver: bridge
+      name: sss_network
